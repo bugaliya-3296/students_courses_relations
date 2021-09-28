@@ -35,7 +35,25 @@ const authToken = {
             const decodedToken = jwt.verify(bearerAuthToken, 'privateKey', { expiresIn: '1d' });
             next();
         }
-    }
+    },
+    register: async (req, res, next) => {
+        try {
+            const token = await userService.signUp(req.body);
+
+            if (token) {
+                res.status(200).json({
+                    token,
+                    phoneNumber: Number(req.body.phone),
+                    userexists: true,
+                    tokenExpiration: '24 hrs',
+                });
+            }
+        } catch (error) {
+            console.log('---------------'+error);
+            res.send('somethng went wrong...');
+            throw error('somethng went wrong...')
+        }
+    },
 }
 
 module.exports = authToken;

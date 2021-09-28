@@ -20,10 +20,12 @@ module.exports = async (req, res, next) => {
 
   try {
     // decode token to get user details from auth token
-    const decodedToken = jwt.verify(token, 'privateKey', {expiresIn: '1d'});
+    const decodedToken = await jwt.verify(token, 'privateKey', {expiresIn: '1d'});
+    console.log('-------------',decodedToken)
     return next();
     // return res.status(401).json({ message: 'User not Authorized.' });
   } catch (err) {
+    console.log(err);
     return res.status(401).json({ message: 'User not Authorized.' });
   }
 };
